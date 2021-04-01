@@ -109,8 +109,5 @@ Chapter 10
 Chapter 11
 
 - 27 Disk Management & Scheduling 1 - 35분
-<<<<<<< HEAD
 - 28 Disk Management & Scheduling 2 - 9분
-=======
-- 28 Disk Management & Scheduling 2 - 9분
->>>>>>> 67bf2aa49d0bae9ad064a9dad25e896d53e31444
+
