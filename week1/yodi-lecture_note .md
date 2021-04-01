@@ -6,7 +6,7 @@
 
 운영체제 설명에 앞서 하드웨어적 동작을 설명하는 챕터
 
-<img src="/Users/superyodi/Desktop/스크린샷 2021-04-01 오전 9.12.36.png" alt="스크린샷 2021-04-01 오전 9.12.36" style="zoom:50%;" /> 
+<img width="935" alt="스크린샷 2021-04-01 오전 9 12 36" src="https://user-images.githubusercontent.com/31922389/113261628-a90ba200-930a-11eb-97a4-8a5b427ef546.png">
 
 ### **컴퓨터 시스템 구조**
 
@@ -116,7 +116,8 @@ CPU, Memory, Input과 Output디바이스로 이뤄져 있다.
 
 ### 동기식 입출력과 비동기식 입출력
 
-![스크린샷 2021-04-01 오전 9.26.14](/Users/superyodi/Desktop/스크린샷 2021-04-01 오전 9.26.14.png)
+<img width="866" alt="스크린샷 2021-04-01 오전 9 26 14" src="https://user-images.githubusercontent.com/31922389/113261655-af9a1980-930a-11eb-8b6e-19fc80a5687f.png">
+
 
 
 
@@ -180,7 +181,7 @@ Caching: 더 빠른 저장장치에 많이 쓰이는 데이터들을 복사해 �
 
 ### 프로그램의 실행, 메모리 적재 과정을 중심으로
 
-![스크린샷 2021-04-01 오전 10.21.32](/Users/superyodi/Desktop/스크린샷 2021-04-01 오전 10.21.32.png)
+<img width="911" alt="스크린샷 2021-04-01 오전 10 21 32" src="https://user-images.githubusercontent.com/31922389/113261693-bb85db80-930a-11eb-9306-a819407fc2c9.png">
 
 
 
@@ -218,8 +219,7 @@ Caching: 더 빠른 저장장치에 많이 쓰이는 데이터들을 복사해 �
 
 ### 커널의 주소 공간
 
-![스크린샷 2021-04-01 오전 10.22.17](/Users/superyodi/Desktop/스크린샷 2021-04-01 오전 10.22.17.png)
-
+<img width="905" alt="스크린샷 2021-04-01 오전 10 22 17" src="https://user-images.githubusercontent.com/31922389/113261759-cc365180-930a-11eb-829f-2a8116839763.png">
 
 
 + Code
