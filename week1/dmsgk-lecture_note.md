@@ -166,7 +166,7 @@ Multiprogramming은 여러 프로그램이 메모리에 올라가 있음을 강�
 - I/O를 수행하는 special instruction에 의해
 - Memory mapped I/O에 의해
 
-<img src="/Users/johyeonyoon/Desktop/Screen Shot 2021-03-31 at 10.22.59 PM.png" alt="Screen Shot 2021-03-31 at 10.22.59 PM"  />
+ ![Screen Shot 2021-03-31 at 10 22 59 PM](https://user-images.githubusercontent.com/72622744/113266940-c2afe800-9310-11eb-891a-77f462667174.png)
 
 
 
