@@ -121,6 +121,7 @@
   <img width="448" alt="스크린샷 2021-04-20 오후 5 06 14" src="https://user-images.githubusercontent.com/72622744/115398847-893d0f00-a222-11eb-8e7e-db27d6649ad5.png">
 
 - Dining Philosophers Problem
+
   <img width="510" alt="스크린샷 2021-04-21 오후 9 02 01" src="https://user-images.githubusercontent.com/72622744/115559128-5eb88800-a2ee-11eb-82fb-ea5e6d470455.png">
 
 
