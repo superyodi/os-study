@@ -261,10 +261,10 @@
 
 - 현대의 컴퓨터는 address space가 매우 큰 프로그램 지원
   - 32bit address 사용시: 4GB의 주소공간
-    - Page size가 4K시 1M의 page table entry 필요
-    - 각 page entryrk 4B시 프로세스당 4M의 page table 필요
+    - Page size가 4K시 1M(= 4GB/4KB)의 page table entry(페이지 테이블 항목) 필요
+    - 각 page entry가 4B씩 필요로 할 경우 프로세스당1M*4B= 4MB의 page table 필요
     - 그러나 대부분의 프로그램은 4G의 주소공간 중 지극히 일부분만 사용하므로 page table 공간이 심하게 낭비됨
-- Page table 자체를 page로 구성
+- Page table 자체를 page로 만든다.
 - 사용되지 않는 주소공간에 대한 outer page table의 엔트리값은 null(대응하는 inner page table이 없음)
 
 <img width="511" alt="스크린샷 2021-04-28 오후 7 21 23" src="https://user-images.githubusercontent.com/72622744/116688133-3832d500-a9f1-11eb-82e3-dcd872bc2279.png">
