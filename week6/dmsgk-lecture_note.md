@@ -273,8 +273,6 @@ FIFO Anomaly : 메모리 프레임을 늘려주어도 page fault가 더 많이 �
 
 
 
-
-
 ## Chap 10. File Systems
 
 ## File and File System
@@ -373,7 +371,6 @@ FIFO Anomaly : 메모리 프레임을 늘려주어도 page fault가 더 많이 �
     - 예) UNIX
 
   - **Password**
-
     - 파일마다 password를 두는 방법(디렉토리 파일에 두는 방법도 가능)
     - 모든 접근 권한에 대해 하나의 password: all or nothing
     - 접근권한별  password: 암기문제, 관리 문제
@@ -385,7 +382,6 @@ FIFO Anomaly : 메모리 프레임을 늘려주어도 page fault가 더 많이 �
 다른 partition에 있는 root file system에 접근해야 한다면?
 
 <img width="508" alt="스크린샷 2021-05-06 오후 12 02 38" src="https://user-images.githubusercontent.com/72622744/117247603-86c0f300-ae79-11eb-8085-abcc8219e8f8.png">
-샷 2021-05-06 오후 12.02.38.png)
 
 
 
