@@ -1,13 +1,5 @@
 
 
-
-
-
-
-
-
-
-
 # [week5] OS lecture note
 
 
@@ -68,7 +60,7 @@ CPU가 바라보는 주소는 logical address다.
   + 컴파일러가 relocatable code를 생성한 경우 가능하다. 
   
 + 실행 타임 바인딩 (Execution time binding / Run time binding)
-  + 프로그램 실행 이우헤도 프로세스의 메모리상 위치를 옮길 수 있다.
+  + 프로그램 실행 이후에도 프로세스의 메모리상 위치를 옮길 수 있다.
   + CPU가 주소를 참조할때마다 해당 데이터가 물리적 메모리의 어느 위치에 존재하는지 address mapping table을 통해 binding을 점검해야한다.
   + **MMU** 라는 하드웨어적인 지원이 필요하다. 
 
@@ -92,7 +84,7 @@ CPU가 바라보는 주소는 logical address다.
   + Context Switching마다 재배치 레지스터에 저장된 프로세스의 물리적 시작주소가 Update된다. 
 + 다중 프로그래밍 환경에서 물리적 메모리 안에 여러개의 프로세스가 동시에 올라와 있는 경우가 대부분이다. 
   + 위 방식을 선택했을 경우 [CPU가 요청한 논리적 주소 + 재배치 레지스터 안의 물리적 시작주소] 의 결과가 실제 메모리에서 벗어나는 문제가 발생할 수 있다.
-    + 이런 상황을 방지하기 위해 **한계 레지스터**를 사용한다. 
+    + 이런 상황을 방지하기 위해 **한계 레지스터**를 사용한다.
   + **<u>한계 레지스터(limit register)</u>**
     + 프로세스가 자신의 주소 공간을 넘어서는 메로리 참조를 하려하는지 체크
     + 현재 CPU에서 수행중인 프로세스의 크기를 담고 있다. 
@@ -292,9 +284,18 @@ CPU가 바라보는 주소는 logical address다.
 
 주소공간의 크기가 n인 프로세스를 메모리에 올릴때 물리적 메모리 내 가용 공간중 어떤 위치에 올릴것인지 결정
 
++ First-fit
+  + 크기가 n이상인 것 중 최초로 발견되는 hole에 할당
++ Best-fit
+  + 크기가 n이상인 **가장 작은 hole을 찾아서 할당**
+  + hole들의 리스트가 크기순으로 정렬되지 않은 경우 모든 hole들의 리스트들을 탐색해야 함
+  + 많은 수의 아주 작은 hole들이 생성됨 
++ Worst-fit
+  + 가장 큰 hole에 할당
+  + 역시 모든 hole 리스트를 탐색해야 함
+  + 상대적으로 아주 큰 hole들이 생성됨 
++ *First-fit, Best-fit이 Worst-fit 보다 속도와 공간 이용률 측면에서 효과적인 것으로 알려짐*
 
-
-<img width="908" alt="스크린샷 2021-04-27 오후 9 07 27" src="https://user-images.githubusercontent.com/31922389/116403788-f6772280-a868-11eb-83e5-db70f4a91887.png">
 
 
 
@@ -471,45 +472,45 @@ CPU가 사용하는 논리적 주소를 페이지 주소(p)와 페이지 오프�
 
 ### Two-Level Page Table (계층적 페이징)
 
-![스크린샷 2021-04-28 오후 7.46.31](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-04-28 오후 7.46.31.png) 
+현대 컴퓨터는 address space가 매우 큰 프로그램을 지원한다. 
+
+<div>
+#### 문제 상황
+
+각 프로그램의 물리적 크기와 실제 논리적 크기는 독립적이다. 
+
+프로그램마다 가지고 있는 가상 메모리의 크기는 최대 어디까지 가능할까? 
+
+32bit address를 사용한다 가정할때, 최대 2<sup>32</sup>(4G)의 주소 공간을 제공한다. 
 
 
 
-2단계 페이지 테이블
+> **참고**
+>
+> 
+>
+> 2<sup>10</sup>B ----> 1K
+>
+> 2<sup>20</sup>B ----->  1M
+>
+> 2<sup>30</sup> B ----> 1GB
+>
+> 2<sup>32</sup>B  ----> 4GB
 
 
 
-논리주소 32비트 주소를 이용해서 
-
-각 프로그램의 물리적 크기와 실제 논리적 크기는 독립적임 
-
-
-
-프로그램마다 가지고 있는 가상 메모리의 크기가 maximum 어디까지 가능?
-
-32비트 경우, 2^32까지 위치 구분 가능 
++ 페이지 사이즈가 4K일때, 4GB로 표시할 수 있는 공간을 4KB로 쪼개면 전체 1M개의 페이지 갯수가 나온다. 
++ 하지만 대부분 프로그램은 4G의 주소공간 중 지극히 일부분만 사용하므로 **page table 공간이 심하게 낭비됨** 
 
 
 
-2^10 -> K
+</div>
 
-2^20 -> M
+#### **해결 방안**
 
-2^30 -> G
-
-2^32B (4GB)
-
-
-
-4GB로 표시할 수 있는 공간을 4KB로 쪼개면 전체 1M개의 페이지 갯수가 나옴
-
-전체 메모리 주소공간 중 실제 프로그램이 사용하는 공간은 극히 일부
-
- 
-
-
-
-무튼 공간 낭비 심해서 2단계 페이지 테이블 사용하겠다. 
++ 페이지 테이블 공간이 낭비되는 것을 막기 위해 **Two-level**로 구성한 테이블을 사용한다.
+  + page table 자체를 page로 구성
++ 사용되지 않는 주소 공간에 대한 outer page table의 엔트리 값은 NULL (대응하는 inner page table) 없음 
 
 
 
@@ -517,79 +518,94 @@ CPU가 사용하는 논리적 주소를 페이지 주소(p)와 페이지 오프�
 
 <img width="881" alt="스크린샷 2021-04-28 오후 7 46 59" src="https://user-images.githubusercontent.com/31922389/116775694-522af100-aa9f-11eb-8479-cdf20d3b968e.png">
 
-사용이유: 시간은 더 걸리지만 공간을 줄임
 
-페이지 테이블이 프로그램마다 entry가 100만개 이상 필요
 
-2단계 테이블 사용하면 여전히 안쪽 테이블은 entry 100만개 이상 필요
+#### 사용하는 이유 
 
-+ Outer table이 하나 더 만들어지기 때문에 공간도 테이블 1개보다 더 손해 
 
-+ 그런데 왜? 사용해야할까?
+
++ 페이지 테이블은 프로그램마다 entry가 100만개 이상 필요하다
+
++ 2단계 테이블 사용하면 여전히 안쪽 테이블은 entry 100만개 이상 필요하다
+  
++ Outer table이 하나 더 만들어지기 때문에 메모리적으로도 손해를 볼 것같은데 
+  
++ **왜? 사용해야할까?**
 
   +   프로그램을 구성하는 공간 중 상당부분이 사용이 안되는데  사용 안되는 부분을 건너뛰고 엔트리를 만들 순 없다.
 
   + 비록 사용이 안되는 페이지들이 있다해도 Maximum 크기만큼 outer page를 만들어야함
 
-  + 하지만 page table에서는 실제로 사용되는 부분만 실제 주소 할당되고 <u>사용 안되는 부분은 null을 가리키도록 함</u> 
+    +   하지만 page table에서는 실제로 사용되는 부분만 실제 주소 할당되고 <u>사용 안되는 부분은 null을 가리키도록 함</u> 
 
     
 
++ offset
+
+  논리적 주소에서 바깥 테이블의 index를 가지고 주소 변환정보를 얻음
+
+  + 안쪽 페이지 테이블중 어떤 테이블인지  알려줌
+  + 안쪽 페이지 테이블로 가서 페이지 번호를 가면 물리적인 페이지 프레임 번호를 얻게 됨 
+
+#### Two-Level Paging Example
+
++ logical address 구성 ( 32bit machine + 4K page size 일때)
+  + 20bit : page number
+  + 12 bit: page offset
++ page table 자체가 page로 구성되기 때문에 page number는 다음과 같이 나뉜다. 
+  (각 page table entry가 4KB)
+  + 10bit의 page number
+  + 10bit의 page offset
++ **따라서 logical address는 다음과 같다.** 
+  
+  + | page number   |               | page offset |
+    | ------------- | ------------- | ----------- |
+    | p<sub>1</sub> | p<sub>2</sub> | d           |
+    | 10            | 10            | 12          |
+    
+    p<sub>1</sub> 은 outer page table의 index
+    
+  + p<sub>2</sub>는 outer page table의 page에서의 변위
 
 
 
 
-offset
 
-논리적 주소에서 바깥 테이블의 index를 가지고 주소 변환정보를 얻음
-
-+ 안쪽 페이지 테이블중 어떤 테이블인지  알려줌
-+ 안쪽 페이지 테이블로 가서 페이지 번호를 가면 물리적인 페이지 프레임 번호를 얻게 됨 
-
-![스크린샷 2021-04-28 오후 8.01.52](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-04-28 오후 8.01.52.png)
-
-
-
-![스크린샷 2021-04-28 오후 8.04.15](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-04-28 오후 8.04.15.png)
-
-
-
-outer-page table: 전체에서 (10bit + 12bit) 빼면 자동으로 계산 가능
-
-page of page table에서는 1K군데 구분 -----> 10bit
-
-d에서는 서로 다른 4K군데를 구분해야 함  ------> 12bit
-
-(하,,,,뭐라는지,,,,,)
-
-
-
-
+<img width="919" alt="스크린샷 2021-04-28 오후 8 04 15" src="https://user-images.githubusercontent.com/31922389/121283657-77204880-c916-11eb-96be-88b15e041fcd.png">
 
 
 
 <u>64bit 컴퓨터에서 1Page당 4KB일때 2단계 페이지 테이블에서  P1,P2는 몇 비트가 필요할끼?</u>
-
-
 
 + 서로 다른 n개의 정보를 구분하기 위해서 몇 비트가 필요한가?
 + n비트로 구분 가능한 서로 다른 위치가 몇 군데인가? 
 
 
 
-![스크린샷 2021-04-28 오후 8.14.43](/Users/superyodi/Desktop/스크린샷 2021-04-28 오후 8.14.43.png)
+#### Multilevel Paging and Performance
 
++ Address space가 더 커지면 다단계 페이지 테이블 필요
 
++ 각 단계 페이지 테이블이 메모리에 존재하므로 logical address의 physical address 변환에 더 많은 메모리 접근 필요
 
-![스크린샷 2021-05-01 오전 11.27.07](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.27.07.png)
++ 캐쉬 메모리를 통해 메모리 접근 시간을 줄일 수 있음
 
++ 4단계 페이지 테이블을 사용하는 경우
 
+  + 메모리 접근 시간이 100ns(나노초),  TLB 접근 시간이 20n일때, 
+  + TLB hit ratio가 98%인 경우
 
-대부분의 주소변환은 TLB를 이용하기때문에 다단계 페이지를 사용해도 메모리 접근시간 크지 않다. 
+  ====> EAT(Effective memory Access Time) = [0.98 * (100+20)] + [0.02 * (100 * 4 + 20 + 100)] = 128 ns
+
+  **결과적으로 메모리 접근 시간을 28%만 다운 시킴** 
 
   
 
-![스크린샷 2021-05-01 오전 11.32.41](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.32.41.png)
++ 대부분의 주소변환은 TLB를 이용하기때문에 다단계 페이지를 사용해도 메모리 접근시간 크지 않다. 
+
+  
+
+<img width="828" alt="스크린샷 2021-05-01 오전 11 32 41" src="https://user-images.githubusercontent.com/31922389/121285136-ca939600-c918-11eb-90ec-565211615df6.png">
 
 
 
@@ -605,37 +621,86 @@ valid invalidi bit: 정보가 의미가 있는지 없는지 확인 (null인지 �
 
 
 
-![스크린샷 2021-05-01 오전 11.36.52](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.36.52.png)
+#### Memory Protectionn
+
+page table의 각 entry마다 아래의 bit를 둔다.
+
++ Protection bit
+  + page에 대한 접근 권한 (read / write/ read-only)
++ Valid-invalid bit
+  + **valid**: 해당 주소의 frame에 그 프로세스를 구성하는 유효한 내용이 있음을 뜻함 (접근 허용)
+  + **Invalid**: 해당 주소의 frame에 유효한 내용이 없음을 뜻함 (접근 불허)
+    + 프로세스가 그 주소 부분을 사용하지 않는 경우
+    + 해당 페이지가 메모리에 올라와 있지 않고 swap area에 있는 경우 
+
+
+
+### Inverted Page Table
+
+page table의 가장 큰 단점: page table의 공간이 매우 큼 
+
++ page table이 매우 큰 이유
+  + 모든 process별로 그 logical address에 대응하는 모든 page에 대해 page table entry가 존재 
+  + 대응하는 page가 메모리에 있든 아니든간에 page table에는 entry로 존재
+
+
+
+#### Inverted page table
+
+원래 process의 page table을 보고 physical memory 주소를 찾아간다
+
+하지만 <u>inverted table은 frame의 갯수만큼 page table을 생성하고 f만큼 떨어진 곳에 주소를 저장한다.</u>
+
+
+
++ 시스템 안에 page table 1개 존재
+  + page table의 엔트리가 <u>물리적 메모리의 페이지 프레임 갯수만큼 존재</u>
+
++ page frame 하나당 page table에 하나의 entry를 둔 것 
+
++ 각 page table entry는 각각의 물리적 메모리의 page frame이 담고 있는 내용 표시
+  + (pid, process의 logical address)
++ 단점
+  + 테이블 전체를 탐색해야함 
++ Solution
+  + associative register 사용 (expensive)
+    ---> TLB처럼 동시에 여러개 탐색 
+
+
+
+<img width="935" alt="스크린샷 2021-05-01 오전 11 40 06" src="https://user-images.githubusercontent.com/31922389/121293565-cbcbbf80-c926-11eb-8fd1-302606b30f11.png">
 
 
 
 
 
- ![스크린샷 2021-05-01 오전 11.39.46](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.39.46.png)
-
-![스크린샷 2021-05-01 오전 11.40.06](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.40.06.png)
 
 
+### Shared Page
 
+*하나의 프로그램을 여러개 실행할때 어떻게 메모리에 올려야 할까?*
 
+Data 부분은 달라도 Code부분은 같을 것이다. 동일한 Code 부분을 메모리에 여러개 할당하는 것은 메모리 낭비가 될 수 있다. 
 
-원래 페이지 테이블을 통한 주소변환을 뒤집은 것
-
-
-
-시스템 안에 페이지테이블 1개 존재
-
-페이지테이블의 엔트리가 물리적 메모리의 페이지 프레임 갯수만큼 존재![스크린샷 2021-05-01 오전 11.45.04](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.45.04.png)
-
-![스크린샷 2021-05-01 오전 11.45.52](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.45.52.png)
+이 때 사용하는 방법 ---> **Shared Page**
 
 
 
++ Shared code
+  + <u>**Re-entrant Code** (= Pure code)</u>
+  + read-only로 하여 프로세스 간에 하나의 code만 메모리에 올림
+    + e.g) text editors, compilers, window systems
+  + Shared code는 모든 프로세스의 *logical address space*에서 동일한 위치에 있어야 함
 
 
-공유할 수 있는 코드는 같은 frame으로 매핑시켜서 1copy만 올라가도록함
 
-동일한 피지컬 어드레스와 로지컬 어드레스를 가져야한다. 
++ Private code and data
+  + 각 프로세스들은 독자적으로 메모리에 올림
+  + Private data는 logical address space 내부의 어떤 곳에 저장돼도 상관 없음 
+
+
+
+<img width="845" alt="스크린샷 2021-05-01 오전 11 45 52" src="https://user-images.githubusercontent.com/31922389/121294700-ca9b9200-c928-11eb-8d13-2a00bbdd2324.png">
 
 
 
@@ -652,68 +717,106 @@ valid invalidi bit: 정보가 의미가 있는지 없는지 확인 (null인지 �
 
 > 세그멘테이션
 
-![스크린샷 2021-05-01 오전 11.50.48](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.50.48.png)
-
-프로세스의 주소공간을 **의미단위인** 세그먼트로 나눠서 관리하는 기법
 
 
+### Segmentation
 
-![스크린샷 2021-05-01 오전 11.51.46](/Users/superyodi/Desktop/스크린샷 2021-05-01 오전 11.51.46.png)
++ 프로세스의 주소 공간을 **의미 단위**인 segment로 나눠서 관리하는 기법
+  + 작게는 프로그램을 구성하는 함수 하나하나를 세그먼트로 정의
+  + 크게는 프로그램 전체를 하나의 세그먼트로 정의 가능 
+  + 일반적으로는 *code, data, stack* 부분이 하나씩의 세그먼트로 정의됨 
+
++ 세그먼트는 다음과 같은 *logical unit* 들이다
+
+  + e.g)  `main(), function, global variables, stack, symbol table, arrays`
+
+    
+
+
+
+
+
+### Segmentaion Architecture
+
++ logical address는 다음 두 가지로 구성
+  + <segment-number, offset >
++ **<u>Segment table</u>**
+  + 각각의 테이블 엔트리 구성요소 
+    + **base**  - 세그먼트가 시작하는 물리주소
+    + **limit** - 세그먼트의 길이
+  + **Segment - table base register (STBR)**
+    + 물리적 메모리에서의 segment table의 위치
+  + **Segment - table length register (STLR)**
+    + 프로그램이 사용하는 segment의 수
+      + 만약 segment numer s가 STLR 보다 같거나 크다면 잘못된 주소 참조이므로 trap을 발생시킨다. 
+
+
 
 
 
 <img width="867" alt="스크린샷 2021-05-01 오전 11 52 46" src="https://user-images.githubusercontent.com/31922389/116776064-a2a34e00-aaa1-11eb-8fa2-7fae3f69e782.png">
 
- 
-
-CPU가 논리주소를 주면 segment 번호와 offset(세그먼트에서 얼마나 떨어진 위치)으로 나눔
 
 
+1. 세그먼트는 자신의 주소 정보뿐 아니라 다음과 같은 정보를 가지고 있다 
+   + *s* : segment 번호
+   + *d* : offset(세그먼트에서 떨어진 위치)
+   
+   
+   
+2. 세그먼트 기법을 실제로 사용하기 위해서 segment table이 필요하다. 
+   segment table의 엔트리에는
 
-엔트리에 두가지 정보: segment의 길이 , 시작 주소
+   + *limit* : 세그먼트의 길이 
+   + *base* : 세그먼트가 시작하는 물리적 주소 
 
-​	길이: 세그먼트의 길이가 제각각
+   가 저장되어 있다. 
 
+3. e.g ) s = 5인 경우
 
+   1. segment table의 5번 엔트리를 참조해서 limit, base 값을 파악한다. 
+   2. limit 값과 d  값을 비교한다.
+      + d < limit == true
+        + d + base 해서 실제 물리 주소공간을 알아내고 물리공간에 접근해 segment 5번의 값을 찾는다. 
+      + d < limit == false
+        + 잘못된 주소 참조이므로 **trap**을 발생시킨다. 
 
-세그먼트 번호가 요청한게 맞는지 체크
+   
 
-+ STLR과 세그먼트 번호를 비교해봄
+   
 
+#### Example of Segmentation
 
-
-
-
-
-
-
-
-두가지 체그하고 세그먼트해야함
-
-1. 논리주소의 세그먼트 번호가 
-2. 세그먼트의 길이가 요청ㅂ
-
-![스크린샷 2021-05-01 오전 11.56.27](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.56.27.png)
-
-
-
-
-
-![스크린샷 2021-05-01 오전 11.56.53](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오전 11.56.53.png)
+<img width="862" alt="스크린샷 2021-05-01 오전 11 56 27" src="https://user-images.githubusercontent.com/31922389/121479969-87632100-ca05-11eb-9ef1-6a0c53d345b6.png">
 
 
 
-### 페이징과 세그먼테이션 비교
+#### Segmetation Architecture의 특징 
 
-공유, 보안 등 의미단위로 처리해야하는 일 ---> 세그먼트
++ <u>Protection</u>
+  + 각 세그먼트 별로 protrction bit가 있음
+  + Each entry
+    + Valid bit 
+      + 0 => illegal segment
+    + Read/Write/Execution 권한 bit
++ <u>Sharing</u>
+  + shared segment
+  + same segment numer
+
+***segment는 의미 단위라서 sharing과 protection에서 paging보다 훨씬 효과적이다.*** 
+
++ <u>Allocation</u>
+  + first fit / best fit
+  + **외부 조각 발생 **
+    + segment의 길이가 동일하지 않으므로 가변분할 방식과 동일한 문제가 일어난다. 
 
 
 
-세그먼테이션은 hole이 발생하지만 그래도 테이블로 인한 메모리 낭비가 심한 쪽은 오히려 페이징
+##### 페이징과 세그먼테이션 비교
 
+공유, 보안 등 의미단위로 처리해야하는 일에서는 세그먼트를 사용한다. 
 
-
-![스크린샷 2021-05-01 오후 12.08.00](/Users/superyodi/Library/Application Support/typora-user-images/스크린샷 2021-05-01 오후 12.08.00.png)
+세그먼테이션은 hole이 발생하지만 오히려 페이징이 테이블로 인해 페이징 기법이 메모리 낭비가 더 심하다. 
 
 
 
@@ -721,41 +824,26 @@ CPU가 논리주소를 주면 segment 번호와 offset(세그먼트에서 얼마
 
 > 페이지드 세그멘테이션
 
+
+
+### Segmentation with Paging 
+
+segmentation과 paging 기법을 함께 사용하는 방식 
+
 <img width="848" alt="스크린샷 2021-05-01 오후 12 12 24" src="https://user-images.githubusercontent.com/31922389/116776085-c8c8ee00-aaa1-11eb-9a10-43b64f69589a.png">
 
 
 
-
-
-세그먼트 하나가 여러개의 페이지로 구성됨
-
--> allocation 문제 안생김 (외부조각 안생김)
+1. 표면적으로는 segment 단위로 나눈다. 
+2. 나눠진 segment를 page 단위로 나눠서 관리한다. 
 
 
 
-공유, 보안 일들은 segment tabel에서함
+**Pure segmention 과 차이점 **
 
++ segment table의 entry가 segment의 base address를 가지고 있는 게 아니라 segment를 구현하는 page table의 base address를 가진다. 
++ **외부조각 문제가 생기지 않는다. **
 
-
----
-
-
-
-물리적 -> 논리적
-
-주소관리에 있어서 운영체제의 역할은 없다.
-
-전부 하드웨어의 역량
-
-
-
-왜? CPU가 메모리 접근을 하는건 운영체제의 간섭을 받지않음
-
-주소변환은 하드웨어적으로 이뤄지는 문제
-
-
-
-운영체제의 끼어듦은 IO장치에 접근할때 발생
 
 
 
